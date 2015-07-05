@@ -1,7 +1,8 @@
 package DP;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class TroubleOf13Dots {
 	static int money, n;
@@ -29,21 +30,23 @@ public class TroubleOf13Dots {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Scanner sc = new Scanner(System.in);
-		while (sc.hasNext()) {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		String l;
+		while ((l = bf.readLine()) != null && l.length() > 0) {
 			for (int i = 0; i < 105; i++) {
 				Arrays.fill(memo[0][i], -1);
 				Arrays.fill(memo[1][i], -1);
 			}
-			money = sc.nextInt();
-			n = sc.nextInt();
+			String line[] = l.split(" ");
+			money = Integer.parseInt(line[0]);
+			n = Integer.parseInt(line[1]);
 			clothes = new int[n][2];
 			for (int i = 0; i < n; i++) {
-				clothes[i][0] = sc.nextInt();
-				clothes[i][1] = sc.nextInt();
+				line = bf.readLine().split(" ");
+				clothes[i][0] = Integer.parseInt(line[0]);
+				clothes[i][1] = Integer.parseInt(line[1]);
 			}
 			System.out.println(getMax(0, 0, false));
 		}
-		sc.close();
 	}
 }
