@@ -72,6 +72,7 @@ public class ShortestPathAlgorithim {
 					}
 				}
 			}
+
 			System.out.println("Case " + c + ": "
 					+ (min[end] == INF ? -1 : min[end]));
 			c++;

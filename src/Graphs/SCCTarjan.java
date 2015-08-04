@@ -11,7 +11,7 @@ public class SCCTarjan {
 	int time;
 	int[] lowlink;
 	List<List<Integer>> components;
-
+	
 	public List<List<Integer>> scc(List<Integer>[] graph) {
 		int n = graph.length;
 		this.graph = graph;

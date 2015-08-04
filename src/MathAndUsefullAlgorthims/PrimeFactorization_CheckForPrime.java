@@ -31,6 +31,6 @@ public class PrimeFactorization_CheckForPrime {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(primeFactors(30));
+		System.out.println(primeFactors(6));
 	}
 }
