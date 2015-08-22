@@ -21,18 +21,18 @@ public class ShortestPathAlgorithim {
 
 			int m = Integer.parseInt(l[1]);
 
-			List<Edge>[] graph = new List[n];
+			List<Edge>[] graph = new List[n + 1];
 
-			for (int i = 0; i < n; i++)
+			for (int i = 1; i <= n; i++)
 				graph[i] = new ArrayList<Edge>();
 
 			for (int i = 0; i < m; i++) {
 				l = bf.readLine().split(" ");
-				int v1 = Integer.parseInt(l[0]) - 1;
-				int v2 = Integer.parseInt(l[1]) - 1;
+				int v1 = Integer.parseInt(l[0]);
+				int v2 = Integer.parseInt(l[1]);
 				int w = Integer.parseInt(l[2]);
-				graph[v1].add(new Edge(v2, w));
-				graph[v2].add(new Edge(v1, w));
+				graph[v1].add(new Edge(v1, v2, w));
+				graph[v2].add(new Edge(v2, v1, w));
 			}
 
 			final long[] min = new long[n];
@@ -50,8 +50,8 @@ public class ShortestPathAlgorithim {
 					});
 
 			l = bf.readLine().split(" ");
-			int u = Integer.parseInt(l[0]) - 1;
-			int end = Integer.parseInt(l[1]) - 1;
+			int u = Integer.parseInt(l[0]);
+			int end = Integer.parseInt(l[1]);
 			min[u] = 0;
 			for (int i = 0; i < n; i++) {
 				if (u != i)
@@ -80,12 +80,17 @@ public class ShortestPathAlgorithim {
 	}
 
 	static class Edge {
-		int v;
+		int u, v;
 		long w;
 
-		Edge(int v, long w) {
+		Edge(int u, int v, long w) {
+			this.u = u;
 			this.v = v;
 			this.w = w;
+		}
+
+		public String toString() {
+			return u + " --" + w + "--> " + v;
 		}
 	}
 }

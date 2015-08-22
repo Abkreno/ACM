@@ -15,8 +15,7 @@ public class PrimeFactorization_CheckForPrime {
 		return true;
 	}
 
-	public static ArrayList<Long> primeFactors(long numbers) {
-		long n = numbers;
+	public static ArrayList<Long> primeFactors(long n) {
 		ArrayList<Long> factors = new ArrayList<Long>();
 		for (long i = 2; i <= n / i; i++) {
 			while (n % i == 0) {

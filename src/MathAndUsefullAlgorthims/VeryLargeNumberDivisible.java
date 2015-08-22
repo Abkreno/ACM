@@ -2,6 +2,14 @@ package MathAndUsefullAlgorthims;
 
 public class VeryLargeNumberDivisible {
 	/**
+	 * Important notes about Modular_arithmetic
+	 * 
+	 * http://www.artofproblemsolving.com
+	 * /wiki/index.php/Modular_arithmetic/Introduction
+	 * 
+	 */
+
+	/**
 	 * to check if a large a number is divisble by smaller one b
 	 */
 

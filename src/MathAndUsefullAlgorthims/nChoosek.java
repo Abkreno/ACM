@@ -17,15 +17,19 @@ public class nChoosek {
 		return result;
 	}
 
-	static long nC2(int n) {
-		int k = 2;
-		if (n < 4)
-			k = n - 2;
+	static long nC2(long n) {
+		if (n < 2)
+			return 0;
+		if (n == 2)
+			return 1;
+		long k = 2;
 		return n * (n - k + 1) / k;
 	}
 
 	public static void main(String[] args) {
-		System.out.println(nC2(4));
-		System.out.println(nCk(4, 2));
+		for (int i = 0; i < 10000000; i++) {
+			if (nC2(i) != nCk(i, 2))
+				System.out.println(i);
+		}
 	}
 }

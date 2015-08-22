@@ -10,22 +10,25 @@ class extendedPalindrome {
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder out = new StringBuilder();
 		String line = "";
+		char[] s;
+		boolean flag;
+		int len, last, printFromHereIndex, countRev, countUp, matchSoFar, countUpSofar, countDownSoFfar;
 		while ((line = bf.readLine()) != null && line.length() > 0) {
-			char[] s = line.toCharArray();
-			int last = s[s.length - 1];
-			int printFromHereIndex = -1;
+			s = line.toCharArray();
+			last = s[s.length - 1];
+			printFromHereIndex = -1;
 			for (int i = 0; i < s.length; i++) {
 				if (s[i] == last) {
-					int countRev = s.length - 2;
-					int len = countRev;
+					countRev = s.length - 2;
+					len = countRev;
 					if ((len - i) / 2 == 0)
 						break;
-					int countUp = 0;
-					int matchSoFar = -1;
-					int countUpSofar = -1;
-					int countDownSoFfar = -1;
+					countUp = 0;
+					matchSoFar = -1;
+					countUpSofar = -1;
+					countDownSoFfar = -1;
 
-					boolean flag = false;
+					flag = false;
 
 					for (int j = i + 1; countUp < (len - i) / 2; j++) {
 						if (!flag && s[j] == last) {
@@ -65,10 +68,10 @@ class extendedPalindrome {
 					printFromHereIndex = i;
 				}
 			}
-			for (int i = printFromHereIndex; i >= 0; i--) {
-				line += s[i];
-			}
 			out.append(line);
+			for (int i = printFromHereIndex; i >= 0; i--) {
+				out.append(s[i]);
+			}
 			out.append("\n");
 		}
 		System.out.println(out);
