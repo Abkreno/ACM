@@ -2,82 +2,107 @@ package Strings;
 
 import java.util.Arrays;
 
+/******************************************************************************
+ * Compilation: javac Manacher.java Execution: java Manacher text Dependencies:
+ * StdOut.java
+ *
+ * Computes the longest palindromic substring in linear time using Manacher's
+ * algorithm.
+ *
+ * Credits: The code is lifted from the following excellent reference
+ * http://www.leetcode.com/2011/11/longest-palindromic-substring-part-ii.html
+ *
+ ******************************************************************************/
+
 public class ManachersAlgorithmLongestPal {
+	private int[] p; // p[i] = length of longest palindromic substring of t,
+						// centered at i
+	private char[] s; // original string
+	private char[] t; // transformed string
 
-	public static String findLongestPalindrome(char[] S) {
-		if (S == null || S.length == 0)
-			return "";
+	public ManachersAlgorithmLongestPal(char[] s) {
+		this.s = s;
+		preprocess();
+		p = new int[t.length];
 
-		char[] s2 = addBoundaries(S);
-		int[] p = new int[s2.length];
-		int c = 0, r = 0; // Here the first element in s2 has been processed.
-		int m = 0, n = 0; // The walking indices to compare if two elements are
-							// the same
-		for (int i = 1; i < s2.length; i++) {
-			if (i > r) {
-				p[i] = 0;
-				m = i - 1;
-				n = i + 1;
-			} else {
-				int i2 = c * 2 - i;
-				if (p[i2] < (r - i)) {
-					p[i] = p[i2];
-					m = -1; // This signals bypassing the while loop below.
-				} else {
-					p[i] = r - i;
-					n = r + 1;
-					m = i * 2 - n;
-				}
-			}
-			while (m >= 0 && n < s2.length && s2[m] == s2[n]) {
+		int center = 0, right = 0;
+		for (int i = 1; i < t.length - 1; i++) {
+			int mirror = 2 * center - i;
+
+			if (right > i)
+				p[i] = Math.min(right - i, p[mirror]);
+
+			// attempt to expand palindrome centered at i
+			while (t[i + (1 + p[i])] == t[i - (1 + p[i])])
 				p[i]++;
-				m--;
-				n++;
-			}
-			if ((i + p[i]) > r) {
-				c = i;
-				r = i + p[i];
-			}
-		}
-		int len = 0;
-		c = 0;
-		for (int i = 1; i < s2.length; i++) {
-			if (len < p[i]&& i + p[i] + 1 == s2.length) {
-				len = p[i];
-				c = i;
+
+			// if palindrome centered at i expands past right,
+			// adjust center based on expanded palindrome.
+			if (i + p[i] > right) {
+				center = i;
+				right = i + p[i];
 			}
 		}
-		char[] ss = Arrays.copyOfRange(s2, c - len, c + len + 1);
-		System.out.println(Arrays.toString(s2));
-		return String.valueOf(removeBoundaries(ss));
+
 	}
 
-	private static char[] addBoundaries(char[] cs) {
-		if (cs == null || cs.length == 0)
-			return "||".toCharArray();
-
-		char[] cs2 = new char[cs.length * 2 + 1];
-		for (int i = 0; i < (cs2.length - 1); i = i + 2) {
-			cs2[i] = '|';
-			cs2[i + 1] = cs[i / 2];
+	// Transform s into t.
+	// For example, if s = "abba", then t = "$#a#b#b#a#@"
+	// the # are interleaved to avoid even/odd-length palindromes uniformly
+	// $ and @ are prepended and appended to each end to avoid bounds
+	// checking
+	private void preprocess() {
+		t = new char[s.length * 2 + 3];
+		t[0] = '$';
+		t[s.length * 2 + 2] = '@';
+		for (int i = 0; i < s.length; i++) {
+			t[2 * i + 1] = '#';
+			t[2 * i + 2] = s[i];
 		}
-		cs2[cs2.length - 1] = '|';
-		return cs2;
+		t[s.length * 2 + 1] = '#';
 	}
 
-	private static char[] removeBoundaries(char[] cs) {
-		if (cs == null || cs.length < 3)
-			return "".toCharArray();
-
-		char[] cs2 = new char[(cs.length - 1) / 2];
-		for (int i = 0; i < cs2.length; i++) {
-			cs2[i] = cs[i * 2 + 1];
+	public int longestPalindromicLength() {
+		int length = 0; // length of longest palindromic substring
+		int center = 0; // center of longest palindromic substring
+		for (int i = 1; i < p.length - 1; i++) {
+			if (p[i] > length) {
+				length = p[i];
+				center = i;
+			}
 		}
-		return cs2;
+		return (center - 1 + length) / 2 - (center - 1 - length) / 2;
+	}
+
+	// longest palindromic substring
+	public char[] longestPalindromicSubstring() {
+		int length = 0; // length of longest palindromic substring
+		int center = 0; // center of longest palindromic substring
+		for (int i = 1; i < p.length - 1; i++) {
+			if (p[i] > length) {
+				length = p[i];
+				center = i;
+			}
+		}
+		return Arrays.copyOfRange(s, (center - 1 - length) / 2,
+				(center - 1 + length) / 2);
+	}
+
+	// longest palindromic substring centered at index i/2
+	public char[] longestPalindromicSubstring(int i) {
+		int length = p[i + 2];
+		int center = i + 2;
+		return Arrays.copyOfRange(s, (center - 1 - length) / 2,
+				(center - 1 + length) / 2);
 	}
 
 	public static void main(String[] args) {
-		System.out.println(findLongestPalindrome("amanaplanacanals"
-				.toCharArray()));
+		char[] s = "121311".toCharArray();
+		ManachersAlgorithmLongestPal manachers = new ManachersAlgorithmLongestPal(
+				s);
+		for (int i = 0; i < 2 * s.length; i++)
+			System.out.println(i + ": "
+					+ String.valueOf(manachers.longestPalindromicSubstring(i)));
+		System.out.println(manachers.longestPalindromicLength());
 	}
 }
